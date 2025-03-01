@@ -1,0 +1,30 @@
+{
+  "name": "vynaa-bot",
+  "version": "1.0.0",
+  "description": "Telegram Bot with Premium and Limit Features",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "axios": "^0.21.1",
+    "awesome-phonenumber": "^2.68.0",
+    "cfonts": "^2.9.3",
+    "chalk": "^4.1.2",
+    "chalk-animation": "^2.0.3",
+    "child_process": "^1.0.2",
+    "express": "^4.17.1",
+    "fast-glob": "^3.3.3",
+    "file-type": "^18.0.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "form-data": "^4.0.2",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^2.6.7",
+    "node-telegram-bot-api": "^0.56.0",
+    "moment-timezone": "^0.5.33",
+    "performance-now": "^2.1.0",
+    "sharp": "^0.29.1",
+    "yt-search": "^2.10.1"
+  }
+}
