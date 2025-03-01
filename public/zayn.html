@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vynaa Bot Monitoring</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+        .stat-box h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .stat-box p {
+            margin: 5px 0 0;
+            font-size: 16px;
+        }
+        .activity-log {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .activity-log h2 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+        .log-entry {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .log-entry .timestamp {
+            color: #888;
+            font-size: 12px;
+        }
+        .log-entry .message {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vynaa Bot Monitoring Dashboard</h1>
+
+        <!-- Statistik Bot -->
+        <div class="stats">
+            <div class="stat-box" id="total-users">
+                <h2>0</h2>
+                <p>Total Users</p>
+            </div>
+            <div class="stat-box" id="premium-users">
+                <h2>0</h2>
+                <p>Premium Users</p>
+            </div>
+            <div class="stat-box" id="bot-status">
+                <h2>🟢</h2>
+                <p>Bot Status</p>
+            </div>
+        </div>
+
+        <!-- Log Aktivitas -->
+        <div class="activity-log">
+            <h2>Activity Log</h2>
+            <div id="log-entries"></div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk mengambil data dari server
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                updateStats(data);
+            } catch (error) {
+                console.error('Gagal mengambil data:', error);
+            }
+        }
+
+        // Fungsi untuk memperbarui statistik
+        function updateStats(data) {
+            document.getElementById('total-users').querySelector('h2').textContent = data.totalUsers;
+            document.getElementById('premium-users').querySelector('h2').textContent = data.premiumUsers;
+            document.getElementById('bot-status').querySelector('h2').textContent = data.botStatus ? '🟢' : '🔴';
+        }
+
+        // Fungsi untuk memperbarui log aktivitas
+        function updateActivityLog(logs) {
+            const logEntries = document.getElementById('log-entries');
+            logEntries.innerHTML = logs.map(log => `
+                <div class="log-entry">
+                    <div class="timestamp">${new Date(log.timestamp).toLocaleString()}</div>
+                    <div class="message">${log.message}</div>
+                </div>
+            `).join('');
+        }
+
+        // Fungsi untuk mengambil log aktivitas
+        async function fetchActivityLog() {
+            try {
+                const response = await fetch('/api/activity-log');
+                const logs = await response.json();
+                updateActivityLog(logs);
+            } catch (error) {
+                console.error('Gagal mengambil log aktivitas:', error);
+            }
+        }
+
+        // Jalankan fungsi fetchData dan fetchActivityLog setiap 5 detik
+        setInterval(() => {
+            fetchData();
+            fetchActivityLog();
+        }, 5000);
+
+        // Jalankan sekali saat halaman dimuat
+        fetchData();
+        fetchActivityLog();
+    </script>
+</body>
+</html>
